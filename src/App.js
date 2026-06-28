@@ -3,7 +3,17 @@ const app=express();
 app.get("/",(req,res)=>{
     res.send("Hello, World!");
 });
-
+app.get("/admin",(req,res)=>{
+    if(req.query.id==="123"){
+        next();
+    }
+    else{
+        res.status(401).send("Unauthorized");
+    }
+})
+app.get("/admin/profile",(req,res)=>{
+    res.send("welcome to admin profile page");
+})
 /* app.get("/home",(req,res)=>{
     const {name,age}=req.query;
     res.send({name:name,age:18,city:"New York"});
