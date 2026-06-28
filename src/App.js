@@ -1,10 +1,13 @@
 const express=require("express");
 const app=express();
 app.get("/",(req,res)=>{
-    res.send("Hello, World!");
+    throw new Error("something went wrong");
+    
 });
-app.get("/admin",(req,res)=>{
-    if(req.query.id==="123"){
+app.use("/admin",(err,req,res,next)=>{     
+    const token="123";
+
+    if(token==="123"){
         next();
     }
     else{
@@ -45,10 +48,16 @@ function r3(req,res,next){
 }
 app.post("/home",(req,res)=>{
     res.send("post request to home page.");
-})
+})// Sabse last mein, sabke baad
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("Internal Server Error");
+});
 app.listen(3000,()=>{
     console.log("server is running on port 3000");  
 });
+
 
 /* git add .   
 git commit -m "changes made in the code" 
