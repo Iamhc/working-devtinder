@@ -30,7 +30,7 @@ app.delete("/delete",async(req,res)=>{
 database().then(()=>{
     console.log("db connected");
     app.listen(3000,()=>{
-    console.log("server is running on port 3000");  
+    console.log("server is running on the port 3000");  
 });
     }).catch((err)=>{
         console.log("database not connected");
