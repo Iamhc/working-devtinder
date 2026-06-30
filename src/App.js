@@ -1,62 +1,44 @@
 const express=require("express");
+
 const app=express();
-app.get("/",(req,res)=>{
-    throw new Error("something went wrong");
+app.use(express.json());
+
+const database=require('./config/database');
+const User=require("./config/model");
+
+app.post("/signup",async (req,res)=>{
+    const userData=new User(req.body);
+    try{
+        await userData.save();
+     res.send("data saved");
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).send("error occurred");
+    }
     
 });
-app.use("/admin",(err,req,res,next)=>{     
-    const token="123";
-
-    if(token==="123"){
-        next();
-    }
-    else{
-        res.status(401).send("Unauthorized");
-    }
+app.get("/getData",async(req,res)=>{
+    const data=await User.find({age:19});
+    res.send(data);
 })
-app.get("/admin/profile",(req,res)=>{
-    res.send("welcome to admin profile page");
-})
-/* app.get("/home",(req,res)=>{
-    const {name,age}=req.query;
-    res.send({name:name,age:18,city:"New York"});
-}) */
-/* app.get(/.*fly$/,(req,res)=>{
-    res.send("welcome to home page");
-}) */
-app.get("/home",(req,res,next)=>{
-    next(); 
-},
-(req,res,next)=>{
-    next();
-},
-(req,res)=>{
-    res.send("welcome");
-})
-app.get("/about",r1,[r2],r3);
-function r1(req,res,next){
-    console.log("r1 is created");
-    next();
-}
-function r2(req,res,next){
-    console.log("r2 is created");
-    next();
-}
-function r3(req,res,next){
-    console.log("r3 is created");
-    res.send("welcome to about page");
-}
-app.post("/home",(req,res)=>{
-    res.send("post request to home page.");
-})// Sabse last mein, sabke baad
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send("Internal Server Error");
+app.delete("/delete",async(req,res)=>{
+    await User.findOneAndDelete({email:"dummy@gmail.com"});
+    res.send("data deleted");
 });
-app.listen(3000,()=>{
+
+database().then(()=>{
+    console.log("db connected");
+    app.listen(3000,()=>{
     console.log("server is running on port 3000");  
 });
+    }).catch((err)=>{
+        console.log("database not connected");
+        console.log(err);
+    });
+
+
+ 
 
 
 /* git add .   
