@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const userSchema=new mongoose.Schema({
+    
     name:{
         type:String,
         required:true
@@ -25,6 +26,13 @@ const userSchema=new mongoose.Schema({
                 throw new Error("age must be greater than 18");
             }
         }
+    },
+    about:{
+        type:String,
+        default:"Hey there! I am using Devtinder"
+    },
+    hobbies:{
+        type:[String],
     }
  });
 module.exports=mongoose.model('User',userSchema);
