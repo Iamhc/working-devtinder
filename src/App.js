@@ -19,13 +19,18 @@ app.post("/signup",async (req,res)=>{
     
 });
 app.get("/getData",async(req,res)=>{
-    const data=await User.find({age:19});
+    const data=await User.find({Age:19});
     res.send(data);
 })
 app.delete("/delete",async(req,res)=>{
     await User.findOneAndDelete({email:"dummy@gmail.com"});
     res.send("data deleted");
 });
+app.patch("/update",async(req,res)=>{
+    await User.findOneAndUpdate({email:"dummy@gmail.com"},{name:"hc",Age:50});
+    res.send("data updated");
+    console.log("data updated");
+})
 
 database().then(()=>{
     console.log("db connected");
