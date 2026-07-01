@@ -14,20 +14,20 @@ app.post("/signup",async (req,res)=>{
     }
     catch(err){
         console.log(err);
-        res.status(500).send(err);
+        res.status(400).send(err.message);
     }
     
 });
 app.get("/getData",async(req,res)=>{
-    const data=await User.find({Age:19});
+    const data=await User.find({name:req.body.name});
     res.send(data);
 })
 app.delete("/delete",async(req,res)=>{
-    await User.findOneAndDelete({email:"dummy@gmail.com"});
+    await User.findOneAndDelete({email:req.body.email});
     res.send("data deleted");
 });
 app.patch("/update",async(req,res)=>{
-    await User.findOneAndUpdate({email:"dummy@gmail.com"},{name:"hc",Age:50});
+    await User.findOneAndUpdate({email:req.body.email},{...req.body});
     res.send("data updated");
     console.log("data updated");
 })
