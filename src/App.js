@@ -28,7 +28,7 @@ app.delete("/delete",async(req,res)=>{
 });
 app.patch("/update",async(req,res)=>{
     await User.findOneAndUpdate({email:req.body.email},{...req.body});
-    res.send("data updated");
+    res.send("data update");
     console.log("data updated");
 })
 
