@@ -1,5 +1,5 @@
 const express=require("express");
-
+const validate=require("validator");
 const app=express();
 app.use(express.json());
 
@@ -8,9 +8,16 @@ const User=require("./config/model");
 
 app.post("/signup",async (req,res)=>{
     const userData=new User(req.body);
+
     try{
+        if(validate.isEmail(req.body.email)){
         await userData.save();
-     res.send("data saved");
+        res.send("data saved");
+        }
+        else{
+            throw new Error("invalid email");
+        }
+        
     }
     catch(err){
         console.log(err);
