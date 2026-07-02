@@ -27,9 +27,20 @@ app.delete("/delete",async(req,res)=>{
     res.send("data deleted");
 });
 app.patch("/update",async(req,res)=>{
+    try{
+    const ALLOWED_UPDATES=["class","email","Age","password","about","ProfilePic","hobbies","gender"];
+    Object.keys(req.body).forEach((key)=>{
+     if(!ALLOWED_UPDATES.includes(key)){
+        throw new Error("invalid updates");
+     }
+    }) 
     await User.findOneAndUpdate({email:req.body.email},{...req.body});
     res.send("data update");
     console.log("data updated");
+}
+     catch(err){
+        res.status(400).send(err.message);
+     }
 })
 
 database().then(()=>{
