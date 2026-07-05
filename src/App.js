@@ -2,16 +2,19 @@ const express=require("express");
 const validate=require("validator");
 const app=express();
 app.use(express.json());
-
+const jwt=require('jsonwebtoken');
 const database=require('./config/database');
 const User=require("./config/model");
+const cookieparser=require('cookie-parser');
 
+app.use(cookieparser());
 app.post("/signup",async (req,res)=>{
     const userData=new User(req.body);
 
     try{
         if(validate.isEmail(req.body.email)){
         await userData.save();
+     
         res.send("data saved");
         }
         else{
@@ -25,9 +28,48 @@ app.post("/signup",async (req,res)=>{
     }
     
 });
+app.post("/login",async (req,res)=>{
+    const userData=new User(req.body);
+    try{
+    User.findOne({email:req.body.email,password:req.body.password}).then((data)=>{
+        if(data){
+            const token=jwt.sign({password:data.password},"PASSWORD_KEY");
+            res.cookie("token", token);
+            res.send("login successful"); 
+        }
+        else{
+            res.status(400).send("invalid credentials");
+        }
+    });
+}
+        
+    catch(err){
+        console.log(err);
+        res.status(400).send(err.message);
+    }
+    
+});
+
 app.get("/getData",async(req,res)=>{
-    const data=await User.find({name:req.body.name});
-    res.send(data);
+   
+    try{
+    if(req.cookies.token){
+            const token=req.cookies.token;
+            const decoded=jwt.verify(token,"PASSWORD_KEY");
+            User.findOne({password:decoded.password}).then((data)=>{
+            if(data){
+            res.send(data); 
+             }
+            else{
+            res.status(400).send("invalid credentials");
+            }
+    });
+} 
+    }
+    catch(err){
+        console.log(err);
+        res.status(400).send(err.message);
+    }
 })
 app.delete("/delete",async(req,res)=>{
     await User.findOneAndDelete({email:req.body.email});
