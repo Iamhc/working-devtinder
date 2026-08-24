@@ -17,21 +17,11 @@ app.use("/",signup);
 
 const login=require("./routes/login");
 app.use("/",login);
+const middleware=require("./routes/middleware");
 
-app.get("/getData", async (req, res) => {
+app.get("/getData",middleware, async (req, res) => {
   try {
-    if (req.cookies.token) {
-      const token = req.cookies.token;
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const data = await User.findOne({ _id: decoded._id });
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(400).send("invalid credentials");
-      }
-    } else {
-      res.status(400).send("token not found");
-    }
+        res.send(req.user);
   } catch (err) {
     console.log(err);
     res.status(400).send(err.message);
