@@ -22,7 +22,10 @@ const middleware=require("./routes/middleware");
 const getData=require("./routes/getData")
 app.use("/",getData);
 
-app.delete("/delete", async (req, res) => {
+const updatePassword = require("./routes/updatePassword");   // apni file ka naam check kar lo
+app.use("/", updatePassword);
+
+app.delete("/delete", middleware,async (req, res) => {
   await User.findOneAndDelete({ email: req.body.email });
   res.send("data deleted");
 });
