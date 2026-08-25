@@ -5,8 +5,6 @@ const express=require('express');
 const authRouter=express.Router();
 const jwt = require("jsonwebtoken");
 
-
-
 authRouter.post("/login", async (req, res) => {
   try {
     const data = await User.findOne({ email: req.body.email });
@@ -24,5 +22,12 @@ authRouter.post("/login", async (req, res) => {
     res.status(400).send(err.message);
   }
 });
+
+authRouter.post("/logout",async(req,res)=>{
+res.cookie("token",null,{
+  expires:new Date(Date.now())
+})
+res.send("logged out")
+})
 
 module.exports=authRouter;
