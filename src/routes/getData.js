@@ -1,5 +1,7 @@
 const express=require("express")
 const router=express.Router();
+const middleware=require("./middleware");
+
 router.get("/getData",middleware, async (req, res) => {
   try {
         res.send(req.user);

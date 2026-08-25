@@ -19,27 +19,20 @@ const login=require("./routes/login");
 app.use("/",login);
 const middleware=require("./routes/middleware");
 
-app.get("/getData",middleware, async (req, res) => {
-  try {
-        res.send(req.user);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send(err.message);
-  }
-});
+const getData=require("./routes/getData")
+app.use("/",getData);
 
 app.delete("/delete", async (req, res) => {
   await User.findOneAndDelete({ email: req.body.email });
   res.send("data deleted");
 });
 
-app.patch("/update", async (req, res) => {
+app.patch("/update",middleware, async (req, res) => {
   try {
     const ALLOWED_UPDATES = [
       "class",
       "email",
       "Age",
-      "password",
       "about",
       "ProfilePic",
       "hobbies",
@@ -50,7 +43,7 @@ app.patch("/update", async (req, res) => {
         throw new Error("invalid updates");
       }
     });
-    await User.findOneAndUpdate({ email: req.body.email }, { ...req.body });
+    await User.findOneAndUpdate({ _id: req.user._id }, { ...req.body });
     res.send("data update");
     console.log("data updated");
   } catch (err) {
