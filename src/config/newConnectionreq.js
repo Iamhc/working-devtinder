@@ -10,10 +10,12 @@ const connectionSchema=new mongoose.Schema({
     },
     status:{
         type:String,
+        required:true,
         enum:{
             values:["INTERESTED","REJECTED","ACCEPTED","NOT INTERESTED"],
-            message:`{values} not in values`
+            message:`{VALUE} not in values`
         }
     }
-});
+},
+  { timestamps: true });
 module.exports=mongoose.model('connectionRequest',connectionSchema)
