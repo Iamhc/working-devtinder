@@ -9,6 +9,11 @@ router.post("/request/:status/:toUserId",middleware,async (req,res)=>{
      const fromUserId=req.user._id;
     const toUserId=req.params.toUserId;
     const status=req.params.status;
+    const ALLOWED_UPDATES=["INTERESTED","IGNORED"]
+
+    if(!ALLOWED_UPDATES.includes(status)){
+     throw new Error("Not allowed")
+    }
     const Connection=new connectionRequest({
     toUserId,
     fromUserId,

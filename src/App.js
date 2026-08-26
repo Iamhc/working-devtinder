@@ -30,6 +30,10 @@ app.delete("/delete", middleware,async (req, res) => {
   res.send("data deleted");
 });
 
+const request = require("./routes/request");   // apni file ka actual naam check kar lo
+app.use("/", request);
+
+
 app.patch("/update",middleware, async (req, res) => {
   try {
     const ALLOWED_UPDATES = [

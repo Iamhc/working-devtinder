@@ -12,7 +12,7 @@ const connectionSchema=new mongoose.Schema({
         type:String,
         required:true,
         enum:{
-            values:["INTERESTED","REJECTED","ACCEPTED","NOT INTERESTED"],
+            values:["INTERESTED","REJECTED","ACCEPTED","IGNORED"],
             message:`{VALUE} not in values`
         }
     }
