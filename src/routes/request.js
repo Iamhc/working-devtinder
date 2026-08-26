@@ -11,8 +11,24 @@ router.post("/request/:status/:toUserId",middleware,async (req,res)=>{
     const status=req.params.status;
     const ALLOWED_UPDATES=["INTERESTED","IGNORED"]
 
+    const founduser=req.user.findOne({
+        _id:toUserId
+    })
+    if(founduser){
+        throw new Error("no user found")
+    }
     if(!ALLOWED_UPDATES.includes(status)){
      throw new Error("Not allowed")
+    }
+
+    const check=await connectionRequest.findOne({
+        $or:[
+            {toUserId,fromUserId},
+            {toUserId:fromUserId,fromUserId:toUserId}
+        ]
+    });
+    if(check){
+     throw new Error("exists already");
     }
     const Connection=new connectionRequest({
     toUserId,
