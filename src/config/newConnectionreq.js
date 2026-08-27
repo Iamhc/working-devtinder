@@ -18,4 +18,6 @@ const connectionSchema=new mongoose.Schema({
     }
 },
   { timestamps: true });
+
+  connectionSchema.index({fromUserId:1,toUserID:1})
 module.exports=mongoose.model('connectionRequest',connectionSchema)

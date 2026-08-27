@@ -1,6 +1,7 @@
 const express=require("express")
 const router=express.Router();
 const connectionRequest=require("../config/newConnectionreq");
+const User = require("../config/model");
 
 const middleware=require("./middleware");
 
@@ -11,10 +12,10 @@ router.post("/request/:status/:toUserId",middleware,async (req,res)=>{
     const status=req.params.status;
     const ALLOWED_UPDATES=["INTERESTED","IGNORED"]
 
-    const founduser=req.user.findOne({
+    const founduser=await User.findOne({
         _id:toUserId
     })
-    if(founduser){
+    if(!founduser){
         throw new Error("no user found")
     }
     if(!ALLOWED_UPDATES.includes(status)){
