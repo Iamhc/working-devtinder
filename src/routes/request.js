@@ -69,7 +69,10 @@ catch(err){
 }
 });
 
-router.post("requests/getAllRequests",middleware,async (req,res)=>{
-    connectionRequest.findAll({toUserId:req.user._id})
+router.post("/requests/getAllRequests",middleware,async (req,res)=>{
+    const allrequests=await connectionRequest.find({
+    toUserId:req.user._id,
+    status:"INTERESTED"}).populate("fromUserId","name email");
+    res.send(allrequests);
 })
 module.exports=router;

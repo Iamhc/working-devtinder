@@ -2,7 +2,8 @@ const mongoose=require("mongoose");
 const connectionSchema=new mongoose.Schema({
     fromUserId:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true
+        required:true,
+        ref:"User"
     },
     toUserId:{
         type:mongoose.Schema.Types.ObjectId,
@@ -19,5 +20,5 @@ const connectionSchema=new mongoose.Schema({
 },
   { timestamps: true });
 
-  connectionSchema.index({fromUserId:1,toUserID:1})
+  connectionSchema.index({fromUserId:1,toUserId:1})
 module.exports=mongoose.model('connectionRequest',connectionSchema)
