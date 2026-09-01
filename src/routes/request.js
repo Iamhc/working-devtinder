@@ -49,7 +49,7 @@ router.post("/request/:status/:toUserId",middleware,async (req,res)=>{
 router.post("/requests/:status/:requestId",middleware,async(req,res)=>{
 const loggeduser=req.user._id;
 try{
-const ALLOWED_STATUS=["Accepted","Rejected"];
+const ALLOWED_STATUS=["ACCEPTED","REJECTED"];
 if(!ALLOWED_STATUS.includes(req.params.status)){
 throw new Error("Status corrupt");
 }
@@ -61,7 +61,8 @@ toUserId:loggeduser,
 });
 const status=req.params.status;
 connectionFound.status=status;
-connectionFound.save();
+await connectionFound.save();
+res.send("done status changed")
 }
 catch(err){
  res.status(400).send(err.message)
