@@ -46,4 +46,7 @@ router.post("/request/:status/:toUserId",middleware,async (req,res)=>{
 }
  
 )
+router.post("/requests/:status/:requestId",Auth,async(req,res)=>{
+
+});
 module.exports=router;
