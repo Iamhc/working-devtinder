@@ -68,4 +68,8 @@ catch(err){
  res.status(400).send(err.message)
 }
 });
+
+router.post("requests/getAllRequests",middleware,async (req,res)=>{
+    connectionRequest.findAll({toUserId:req.user._id})
+})
 module.exports=router;
