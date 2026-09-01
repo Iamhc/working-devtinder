@@ -47,6 +47,22 @@ router.post("/request/:status/:toUserId",middleware,async (req,res)=>{
  
 )
 router.post("/requests/:status/:requestId",Auth,async(req,res)=>{
+const loggeduser=req.user._id;
+try{
+const ALLOWED_STATUS=["Accepted","Rejected"];
+if(!ALLOWED_STATUS.includes(req.params.status)){
+throw new Error("Status corrupt");
+}
 
+connectionRequest.findById({
+_id:requestIdleCallback,
+toUserId:loggeduser,
+
+});
+
+}
+catch(err){
+ 
+}
 });
 module.exports=router;
