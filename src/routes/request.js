@@ -75,4 +75,20 @@ router.post("/requests/getAllRequests",middleware,async (req,res)=>{
     status:"INTERESTED"}).populate("fromUserId","name email");
     res.send(allrequests);
 })
+
+router.get("/user/getconnections",middleware,async (req,res)=>{
+    const allrequests=await connectionRequest.find({
+    $or:[{toUserId:req.user._id,status:"ACCEPTED"},
+     {fromUserId:req.user._id,status:"ACCEPTED"}
+    ] 
+}).populate("fromUserId","name email").populate("toUserId","name email")
+    
+    const data=allrequests.map((row)=>{
+    if(row.fromUserId._id==req.user._id){
+    return [row.toUserId,"req sent was accepted"];
+    }
+    return [row.fromUserId,"req received was accepted"];
+    })
+    res.send(data)
+})
 module.exports=router;
